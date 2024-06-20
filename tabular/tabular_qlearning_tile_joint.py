@@ -2,8 +2,9 @@ import utils
 import random
 import numpy as np
 import environment as env
-from qlearning_joint import QLearning_Joint
+from qlearning_tile_joint import QLearning_Tile_Joint
 from tqdm import tqdm
+
 
 actions = ["right", "left"]
 
@@ -20,7 +21,7 @@ if __name__ == "__main__":
         random.seed(run)
         np.random.seed(run)
         for ep in range(args.num_episodes):
-            qlearning_joint_agent= QLearning_Joint(environment, args.step_size, args.gamma, args.epsilon)
+            qlearning_joint_agent= QLearning_Tile_Joint(environment, args.step_size, args.gamma, args.epsilon)
             time_step = 0
             counter = 0
             undiscounted_return = np.zeros(100000-2)
@@ -35,6 +36,9 @@ if __name__ == "__main__":
 
             environment.reset()
 
+        
+    with open('results/tile_coding_joint_max.npy', 'wb') as f:
+        np.save(f, undisc_return)
     
-    with open('results/joint_count.npy', 'wb') as f:
-            np.save(f, undisc_return)
+
+

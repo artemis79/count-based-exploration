@@ -1,4 +1,3 @@
-# Author: Marlos C. Machado
 
 from agent import Agent
 import numpy as np
@@ -51,10 +50,6 @@ class QLearning_Joint(Agent):
 
     def get_reward_count(self,s, a):
             return self.beta * np.sqrt(2*np.log(np.sum(self.state_action_visitation_count[s]))/(self.state_action_visitation_count[s][a]))
-
-    def get_q_count(self, s):
-        count = self.state_action_visitation_count[s]
-        return self.beta / np.sqrt(count + 1)
 
     def update_q_values(self, s, a, r, next_s):
         self.q[s][a] = self.q[s][a] + self.alpha * (r + self.gamma * (1.0 - self.env.is_terminal()) *

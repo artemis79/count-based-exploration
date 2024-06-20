@@ -1,5 +1,3 @@
-# Author: Marlos C. Machado
-
 from agent import Agent
 import numpy as np
 
@@ -20,9 +18,8 @@ class QLearning_Count(Agent):
     def step(self):
         curr_a = self.epsilon_greedy(self.q[self.curr_s], epsilon=self.epsilon)
         r = self.env.act(curr_a)
+        r_intrinsic = self.get_reward_count(self.curr_s, curr_a)
         self.state_action_visitation_count[self.curr_s][curr_a] += 1
-        r_intrinsic = self.beta * np.sqrt(2*np.log(np.sum(self.state_action_visitation_count[self.curr_s]))/(self.state_action_visitation_count[self.curr_s][curr_a]+1))
-        #print('r_intrinsic', r_intrinsic)
 
         next_s = self.env.get_current_state()
         next_a = self.epsilon_greedy(self.q[next_s], epsilon=self.epsilon)
@@ -38,9 +35,10 @@ class QLearning_Count(Agent):
             self.total_undisc_return += self.current_undisc_return
             self.current_undisc_return = 0
 
-    def get_q_count(self, s):
-        count = self.state_action_visitation_count[s]
-        return self.beta / np.sqrt(count + 1)
+    def get_reward_count(self, s, a):
+        n_s = self.state_action_visitation_count[s]
+        r = self.beta * np.sqrt(2*np.log(np.sum(n_s))/n_s[a])
+        return r
 
     def update_q_values(self, s, a, r, next_s, next_a):
         self.q[s][a] = self.q[s][a] + self.alpha * (r + self.gamma * (1.0 - self.env.is_terminal()) *
