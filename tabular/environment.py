@@ -54,7 +54,6 @@ class MDP:
             # TODO: Ideally I should check if there is a header first
             next(reader, None)  # skip the headers
             for row in reader:
-                print(row)
                 if len(row) == 0:  # skip empty lines
                     continue
                 elif row[0] == 'start':

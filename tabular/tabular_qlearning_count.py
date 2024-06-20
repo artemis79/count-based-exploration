@@ -1,4 +1,4 @@
-
+import wandb
 import utils
 import random
 import numpy as np
@@ -10,30 +10,36 @@ from tqdm import tqdm
 actions = ["right", "left"]
 
 if __name__ == "__main__":
-    # Max timestep for each episode
-    number_of_run = 100
+    wandb.init()
+
     # Read arguments:
     args = utils.ArgsParser.read_input_args()
+    num_seeds = args.num_seeds
 
     # Instantiate objects I'll need
     environment = env.MDP(args.input)
+    time_limit = environment.get_time_limit()
+    undisc_return = np.zeros((num_seeds, time_limit+1))
 
     # Actual learning algorithm
-    undisc_return = np.zeros((100000, number_of_run))
-    for run in tqdm(range(0, number_of_run)):
+    for run in tqdm(range(0, num_seeds)):
         random.seed(run)
         np.random.seed(run)
-        for ep in range(args.num_episodes):
-            agent = QLearning_Count(environment, args.step_size, args.gamma, args.epsilon)
-            time_step = 1
-            while not environment.is_terminal():
-                prev_state = agent.curr_s
-                if time_step < 100000:
-                    undisc_return[time_step][run] = agent.get_undisc_return()
-                agent.step()
-                time_step += 1
+
+        total_return = []
+        agent = QLearning_Count(environment, args.step_size, args.gamma, args.epsilon, args.beta)
+        time_step = 1
+
+        while not environment.is_terminal():
+            prev_state = agent.curr_s
+            undisc_return[run][time_step] = agent.get_undisc_return()
+            agent.step()
+
+        total_return.append(agent.get_avg_undisc_return())
         environment.reset()
 
+    average_return = np.mean(total_return)
+    wandb.log({'average_return': average_return})
     with open('results/count_bonus.npy', 'wb') as f:
         np.save(f, undisc_return)
 

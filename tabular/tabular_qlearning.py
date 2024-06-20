@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 if __name__ == "__main__":
     # Wandb setup:
-    wandb.init()
+    wandb.init(project="tile-coding-explroation")
 
     # Read arguments:
     args = utils.ArgsParser.read_input_args()
@@ -41,6 +41,7 @@ if __name__ == "__main__":
         environment.reset()
     
     average_return = np.mean(total_return)
+    
     wandb.log({'average_return': average_return})
     with open('results/qlearning.npy', 'wb') as f:
         np.save(f, undisc_return)

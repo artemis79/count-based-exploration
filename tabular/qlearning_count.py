@@ -4,7 +4,7 @@ import numpy as np
 
 class QLearning_Count(Agent):
 
-    def __init__(self, env, step_size, gamma, epsilon, beta=100.0):
+    def __init__(self, env, step_size, gamma, epsilon, beta):
         super().__init__(env)
         self.gamma = gamma
         self.beta = beta
