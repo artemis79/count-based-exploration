@@ -153,6 +153,7 @@ class MDP:
 
     def get_current_state(self):
         return self.current_state
+    
 
     def is_terminal(self):
         time_is_over = self.time_step >= self.time_limit
@@ -180,3 +181,6 @@ class MDP:
     
     def get_size_actions(self):
         return len(self._full_action_set)
+    
+    def get_time_limit(self):
+        return self.time_limit
