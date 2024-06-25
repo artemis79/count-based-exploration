@@ -5,7 +5,7 @@ method: grid
 name: epsilon_sweep
 metric:
   goal: maximize
-  name: return
+  name: average_return
 
 parameters:
   step_size: 
