@@ -12,7 +12,13 @@ parameters:
     values: [0.001, 0.01, 0.1]
   
   epsilon:
-    values: [0.1]
+    values: [0.01, 0.05, 0.1, 0.2]
 
   gamma:
     value: 0.99
+
+command:
+-${env}
+-python
+-${program}
+-${args_no_hyphens}

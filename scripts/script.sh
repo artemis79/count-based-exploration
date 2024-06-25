@@ -1,10 +1,9 @@
 #!/bin/bash
 #SBATCH --account=def-mbowling
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G       
-#SBATCH --time=0-0:10
-#SBATCH --signal=USR1@300
-#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G      
+#SBATCH --time=2:59:00
+
 
 # SOCKS5 Proxy
 if [ "$SLURM_TMPDIR" != "" ]; then
@@ -14,9 +13,31 @@ if [ "$SLURM_TMPDIR" != "" ]; then
 fi
 
 # Setup Modules
-module load python/3.10.2 gcc/11.3.0 cuda/11.8.0
+module load python/3.10 gcc/11.3.0 cuda/11.8.0
 
 # Setup Python Environment
 cd $SLURM_TMPDIR
-virtualenv pyenv
-. pyenv/bin/activate
+python -m venv venv
+source venv/bin/activate
+echo "load python"
+pip install --no-index numpy
+pip install --no-index matplotlib
+pip install --no-index seaborn
+pip install --no-index tqdm
+pip install --no-index wandb
+
+#git clone
+git config --global http.proxy 'socks5://127.0.0.1:8888'
+git clone --quiet https://github.com/artemis79/count-based-exploration.git $SLURM_TMPDIR/project
+
+
+# Run experiment
+echo "Running experiment..."
+cd $SLURM_TMPDIR/project
+mkdir results
+
+#wandb variables
+export WANDB_API_KEY=c661d4027cae102ac37a9dd80433c1648bab0e56
+export SWEEP_ID=$(wandb sweep tabular/config/qlearning_config.yml --project qlearning)
+wandb agent $SWEEPID
+
