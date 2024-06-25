@@ -1,0 +1,18 @@
+# config for epsilon greedy qlearning
+
+program: qlearning.py
+method: grid
+name: epsilon_sweep
+metric:
+  goal: maximize
+  name: return
+
+parameters:
+  step_size: 
+    values: [0.001, 0.01, 0.1]
+  
+  epsilon:
+    values: [0.1]
+
+  gamma:
+    value: 0.99
