@@ -17,8 +17,3 @@ parameters:
   gamma:
     value: 0.99
 
-command:
--${env}
--python
--${program}
--${args_no_hyphens}
