@@ -22,7 +22,7 @@ class ArgsParser:
             description='Define algorithm\'s parameters.')
 
         parser.add_argument('-s', '--seed', type=int, default=1, help='Seed to be used in the code.')
-        parser.add_argument('-ns', '--num_seeds', type=int, default=1, help='Number of seeds to run')
+        parser.add_argument('-ns', '--num_seeds', type=int, default=50, help='Number of seeds to run')
         parser.add_argument('-i', '--input', type=str, default='tabular/mdps/riverswim.mdp',
                             help='File containing the MDP definition (default: tabular/mdps/riverswim.mdp).')
         parser.add_argument('-t', '--time_step_limit', type=int, default=100000,
@@ -39,6 +39,8 @@ class ArgsParser:
                             help="Valid values: 'dot-prod', 'diff', 'gamma-diff', 'norm' ")
         parser.add_argument('-d', '--divide', type=bool, default=False,
                             help="If true, the reward is equal to 1/reward_structure")
+        parser.add_argument('-f', '--aggregate_function', type=str, default="min",
+                            help="The function we use to aggregate the counts")
 
         args = parser.parse_args()
 
