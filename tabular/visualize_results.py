@@ -33,8 +33,8 @@ class Visualization:
 
     @staticmethod
     def plot_undis_return(undisc_reutrn, name, num_runs, file_name):
-        average_undisc = np.average(undisc_reutrn, axis=1)
-        std_undisc = np.std(undisc_reutrn, axis=1)
+        average_undisc = np.average(undisc_reutrn, axis=0)
+        std_undisc = np.std(undisc_reutrn, axis=0)
         confidence_interval = 1.96*std_undisc/np.sqrt(num_runs)
         plt.ylabel("Undiscounted\nReturn")
         plt.xlabel("Time step")
@@ -49,8 +49,8 @@ class Visualization:
     @staticmethod
     def plot_bonus_rewards(bonus_rewards, name, num_runs, file_name):
         for action in range(2):
-            average_undisc = np.average(bonus_rewards[action], axis=1)
-            std_undisc = np.std(bonus_rewards[action], axis=1)
+            average_undisc = np.average(bonus_rewards[action], axis=0)
+            std_undisc = np.std(bonus_rewards[action], axis=0)
             confidence_interval = 1.96*std_undisc/np.sqrt(num_runs)
             plt.ylabel("Bonus\nReward")
             plt.xlabel("Time step")
@@ -83,10 +83,11 @@ if __name__ == "__main__":
         name, _, _ = f.partition('.')
         name = name.replace('_', ' ')
         name = name.replace('results/', '')
-        if name != "tile coding count bonus min bonus rewards":
+        if name == "tile coding count bonus min":
             undisc_return = np.load(f)
+            print(np.shape(undisc_return))
             print(name)
-            Visualization.plot_undis_return(undisc_return, name, np.shape(undisc_return)[1], 'plots/undiscounted_return')
+            Visualization.plot_undis_return(undisc_return, name, np.shape(undisc_return)[0], 'plots/undiscounted_return')
 
 
     # for filename in os.listdir(directory):

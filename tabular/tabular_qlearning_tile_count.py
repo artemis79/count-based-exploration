@@ -1,3 +1,4 @@
+import wandb
 import utils
 import random
 import numpy as np
@@ -8,39 +9,54 @@ from tqdm import tqdm
 actions = ["right", "left"]
 
 if __name__ == "__main__":
+
+    wandb.init(project="tile-coding-explroation")
+
     # Read arguments:
-    number_of_run = 100
     args = utils.ArgsParser.read_input_args()
+    num_seeds = (args.num_seeds)
 
     environment = env.MDP(args.input)
+    time_limit = environment.get_time_limit()
 
-    undisc_return = np.zeros((100000-2, number_of_run))
-    bonus_rewards = np.zeros((6, 2, 100000-2, number_of_run))
+    undisc_return = np.zeros((num_seeds, time_limit+1))
+    bonus_rewards = np.zeros((6, 2, num_seeds ,time_limit+1))
 
-    for run in tqdm(range(0, number_of_run)):
+    total_return = []
+
+
+    for run in tqdm(range(0, num_seeds)):
         random.seed(run)
         np.random.seed(run)
-        for ep in range(args.num_episodes):
-            qlearning_tile_count= QLearning_Tile_Count(environment, args.step_size, args.gamma, args.epsilon)
-            time_step = 0
-            counter = 0
-            undiscounted_return = np.zeros(100000-2)
-            while not environment.is_terminal():
-                # undisc_return[time_step] = qlearning_joint_agent.get_undisc_return()
+        func = np.min
+        if args.aggregate_function == "sum":
+            func = np.sum
+        elif args.aggregate_function == "max":
+            func = np.max
+
+        qlearning_tile_count= QLearning_Tile_Count(environment, args.step_size, args.gamma, args.epsilon, args.beta, func)
+        time_step = 0
+        counter = 0
+        undiscounted_return = np.zeros(num_seeds)
+        while not environment.is_terminal():
+            # undisc_return[time_step] = qlearning_joint_agent.get_undisc_return()
+            if time_step <= time_limit:
                 qlearning_tile_count.step()
-                if time_step < 100000-2:
-                    undisc_return[time_step][run] = qlearning_tile_count.get_undisc_return()
-                    for state in range(6):
-                        for action in range(2):
-                            bonus_rewards[state][action][time_step][run] = qlearning_tile_count.get_count_reward(state, action)
+                undisc_return[run][time_step] = qlearning_tile_count.get_undisc_return()
+                for state in range(6):
+                    for action in range(2):
+                        bonus_rewards[state][action][run][time_step] = qlearning_tile_count.get_count_reward(state, action)
 
-                # print(time_step, ",", qlearning_joint_agent.get_undisc_return())
-                time_step += 1 
+            time_step += 1 
 
-            environment.reset()
+        total_return.append(undisc_return[run][time_limit-2])
+        environment.reset()
 
-        
-    # Visualization.plot_undis_return(undisc_return, "Tile Coding Intrinsic Reward", number_of_run)
+    average_return = np.mean(total_return)
+    print(average_return)
+    wandb.log({'average_return': average_return})
+    
+
     with open('results/tile_coding_count_bonus_min.npy', 'wb') as f:
         np.save(f, undisc_return)
     
