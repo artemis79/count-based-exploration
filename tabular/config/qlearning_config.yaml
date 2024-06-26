@@ -1,6 +1,6 @@
 # config for epsilon greedy qlearning
 
-program: tabular/qlearning.py
+program: tabular/tabular_qlearning.py
 method: grid
 name: epsilon_sweep
 metric:
