@@ -20,11 +20,10 @@ if __name__ == "__main__":
     time_limit = environment.get_time_limit()
 
     undisc_return = np.zeros((num_seeds, time_limit+1))
-
+    total_return = []
     
     for run in tqdm(range(num_seeds)):
         # Actual learning algorithm        
-        total_return = []
         agent = QLearning(environment, args.step_size, args.gamma, args.epsilon)
         time_step = 1
 
@@ -38,13 +37,13 @@ if __name__ == "__main__":
             # print(time_step, ",", agent.get_undisc_return())
 
         total_return.append(agent.get_avg_undisc_return())
+        print(total_return)
         environment.reset()
     
     average_return = np.mean(total_return)
     std_return = np.std(total_return)
     max_return = np.max(total_return)
     min_return = np.min(total_return)
-
 
     wandb.log({'average_return': average_return,
                'std_return': std_return,
