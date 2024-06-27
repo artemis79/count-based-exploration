@@ -37,7 +37,6 @@ cd $SLURM_TMPDIR/project
 mkdir results
 
 #wandb variables
-export WANDB_API_KEY=c661d4027cae102ac37a9dd80433c1648bab0e56
 export SWEEP_ID=$(wandb sweep tabular/config/qlearning_config.yaml --project tile-coding-exploration)
 wandb agent --project "tile-coding-explroation"  $SWEEPID
 
