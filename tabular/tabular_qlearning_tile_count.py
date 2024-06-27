@@ -39,7 +39,6 @@ if __name__ == "__main__":
         counter = 0
         undiscounted_return = np.zeros(num_seeds)
         while not environment.is_terminal():
-            # undisc_return[time_step] = qlearning_joint_agent.get_undisc_return()
             if time_step <= time_limit:
                 qlearning_tile_count.step()
                 undisc_return[run][time_step] = qlearning_tile_count.get_undisc_return()
@@ -53,8 +52,15 @@ if __name__ == "__main__":
         environment.reset()
 
     average_return = np.mean(total_return)
+    std_return = np.std(total_return)
+    max_return = np.max(total_return)
+    min_return = np.min(total_return)
+
     print(average_return)
-    wandb.log({'average_return': average_return})
+    wandb.log({'average_return': average_return,
+               'std_return': std_return,
+               'min_return': min_return,
+               'max_return': max_return})
     
 
     with open('results/tile_coding_count_bonus_min.npy', 'wb') as f:
