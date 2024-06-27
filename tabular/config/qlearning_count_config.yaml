@@ -2,7 +2,7 @@
 
 program: tabular/tabular_qlearning_count.py
 method: grid
-name: epsilon_sweep
+name: count_sweep
 metric:
   goal: maximize
   name: average_return

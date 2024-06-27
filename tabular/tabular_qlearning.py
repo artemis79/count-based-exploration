@@ -37,7 +37,6 @@ if __name__ == "__main__":
             # print(time_step, ",", agent.get_undisc_return())
 
         total_return.append(agent.get_avg_undisc_return())
-        print(total_return)
         environment.reset()
     
     average_return = np.mean(total_return)

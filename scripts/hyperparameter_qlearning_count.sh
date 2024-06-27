@@ -5,13 +5,6 @@
 #SBATCH --time=2:59:00
 #SBATCH --output=outputs/qlearning.out
 
-# SOCKS5 Proxy
-if [ "$SLURM_TMPDIR" != "" ]; then
-    echo "Setting up SOCKS5 proxy..."
-    ssh -q -N -T -f -D 8888 `echo $SSH_CONNECTION | cut -d " " -f 3`
-    export ALL_PROXY=socks5h://localhost:8888
-fi
-
 # Setup Modules
 module load python/3.10
 
@@ -38,6 +31,6 @@ cd $SLURM_TMPDIR/project
 mkdir results
 
 #wandb variables
-export SWEEP_ID=$(wandb sweep tabular/config/qlearning_config.yaml --project tile-coding-exploration)
+export SWEEP_ID=$(wandb sweep tabular/config/qlearning_count_config.yaml --project tile-coding-exploration)
 wandb agent --project "tile-coding-explroation"  $SWEEPID
 
