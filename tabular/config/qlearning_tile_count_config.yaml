@@ -1,8 +1,8 @@
 # config for epsilon greedy qlearning
 
-program: tabular/tabular_qlearning_count.py
+program: tabular/tabular_qlearning_tile_count.py
 method: grid
-name: count_sweep
+name: tile_count_sweep
 metric:
   goal: maximize
   name: average_return

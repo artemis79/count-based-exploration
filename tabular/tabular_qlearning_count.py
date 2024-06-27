@@ -20,13 +20,13 @@ if __name__ == "__main__":
     environment = env.MDP(args.input)
     time_limit = environment.get_time_limit()
     undisc_return = np.zeros((num_seeds, time_limit+1))
-
+    total_return = []
+    
     # Actual learning algorithm
     for run in tqdm(range(0, num_seeds)):
         random.seed(run)
         np.random.seed(run)
 
-        total_return = []
         agent = QLearning_Count(environment, args.step_size, args.gamma, args.epsilon, args.beta)
         time_step = 1
 
@@ -39,7 +39,14 @@ if __name__ == "__main__":
         environment.reset()
 
     average_return = np.mean(total_return)
-    wandb.log({'average_return': average_return})
+    std_return = np.std(total_return)
+    max_return = np.max(total_return)
+    min_return = np.min(total_return)
+
+    wandb.log({'average_return': average_return,
+               'std_return': std_return,
+               'min_return': min_return,
+               'max_return': max_return})
     with open('results/count_bonus.npy', 'wb') as f:
         np.save(f, undisc_return)
 
