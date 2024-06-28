@@ -39,6 +39,6 @@ cd $SLURM_TMPDIR/count-based-exploration
 mkdir results
 
 #wandb variables
-wandb agent university-alberta/tile-coding-exploration/p57fvvp7
+wandb agent university-alberta/tile-coding-exploration/gndg2ed7
 
 
