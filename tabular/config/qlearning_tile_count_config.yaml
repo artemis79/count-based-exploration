@@ -17,6 +17,9 @@ parameters:
   beta:
     values: [10, 100, 1000, 10000]
 
+  aggregate_function:
+    values: ['sum', 'min']  
+
   gamma:
     value: 0.99
 
