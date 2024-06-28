@@ -3,7 +3,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8G      
 #SBATCH --time=2:59:00
-#SBATCH --output=outputs/qlearning.out
+#SBATCH --output=outputs/qlearning_tile_count_%j.out
 #SBATCH --array=1-50
 
 # Setup Modules
@@ -39,6 +39,6 @@ cd $SLURM_TMPDIR/count-based-exploration
 mkdir results
 
 #wandb variables
-wandb agent university-alberta/tile-coding-exploration/5jdut5su
+wandb agent university-alberta/tile-coding-exploration/p57fvvp7
 
 
